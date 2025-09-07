@@ -94,6 +94,15 @@
             <Form>FrmMain</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Core\ValueObjects\Core.ValueObjects.Endereco.pas"/>
+        <DCCReference Include="Core\Entities\Core.Entities.Clientes.pas"/>
+        <DCCReference Include="Core\ValueObjects\Core.ValueObjects.Contato.pas"/>
+        <DCCReference Include="Core\ValueObjects\Core.ValueObjects.Documento.pas"/>
+        <DCCReference Include="Core\Repositories\Core.Repositories.IClienteRepository.pas"/>
+        <DCCReference Include="Core\Services\Core.Services.ClienteService.pas"/>
+        <DCCReference Include="Infrastructure\Persistence\Infrastructure.Persistence.ClienteRepositoryAdapter.pas"/>
+        <DCCReference Include="Presentation\Controllers\Presentation.Controllers.ClienteFormController.pas"/>
+        <DCCReference Include="Application\UseCases\Application.UseCases.ClienteUseCases.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -116,6 +125,12 @@
                 </Source>
             </Delphi.Personality>
             <Deployment Version="3">
+                <DeployFile LocalName="Win32\Debug\TesteGuaraniDDD.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>TesteGuaraniDDD.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Win32\Debug\TesteGuaraniDDD.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>TesteGuaraniDDD.exe</RemoteName>

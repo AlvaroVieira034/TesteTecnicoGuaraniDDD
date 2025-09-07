@@ -23,8 +23,6 @@ object FrmMain: TFrmMain
     Color = clGradientActiveCaption
     ParentBackground = False
     TabOrder = 0
-    ExplicitLeft = -98
-    ExplicitWidth = 783
     object BtnSair: TSpeedButton
       Left = 345
       Top = 10
