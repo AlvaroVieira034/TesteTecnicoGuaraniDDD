@@ -32,30 +32,28 @@ type
 
 implementation
 
-  uses System.SysUtils, System.RegularExpressions;
-
+uses System.SysUtils, System.RegularExpressions, Core.Utils.Validadores;
 
 { TEndereco }
 
-
 function TEndereco.ValidarCEP: Boolean;
 begin
-
+  Result := (FCEP = '') or TValidadores.ValidarCEP(FCEP);
 end;
 
 function TEndereco.ValidarUF: Boolean;
 begin
-
+  Result := (FUF = '') or TValidadores.ValidarUF(FUF);
 end;
 
 function TEndereco.ToString: string;
 begin
-
+  Result := Format('%s, %s - %s - %s - %s', [FLogradouro, FNumero, FComplemento, FCidade, FUF]);
 end;
 
 function TEndereco.EstaVazio: Boolean;
 begin
-
+  Result := (FCEP = '') and (FLogradouro = '') and (FCidade = '') and (FUF = '');
 end;
 
 
