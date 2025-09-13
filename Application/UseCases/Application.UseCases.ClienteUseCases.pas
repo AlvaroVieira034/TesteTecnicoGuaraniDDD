@@ -2,25 +2,24 @@ unit Application.UseCases.ClienteUseCases;
 
 interface
 
-uses Core.Services.ClienteService, Core.Entities.Cliente, Core.Repositories.IClienteRepository;
+uses Core.Entities.Cliente, Core.Repositories.IClienteRepository, Core.Services.IClienteService, Infrastructure.Persistence.ClienteRepository, Infrastructure.Service.ClienteService,
+     System.SysUtils;
 
 type
   TClienteUseCases = class
 
   private
-    FClienteService: TClienteService;
+    FClienteService: IClienteService;
     FClienteRepository: IClienteRepository;
 
   public
-    constructor Create(AClienteRepository: IClienteRepository);
+    constructor Create(AClienteRepository: IClienteRepository; AClienteService: IClienteService);
     destructor Destroy; override;
 
     function CriarCliente(const ARazaoSocial, ANomeFantasia, ACEP, ALogradouro, AComplemento, ACidade, AUF, ATelefone, ACNPJ: string): Integer;
     function ObterClientePorId(AClienteId: Integer): TCliente;
     procedure AtualizarCliente(AClienteId: Integer; const ARazaoSocial, ANomeFantasia: string);
     procedure ExcluirCliente(AClienteId: Integer);
-    function ListarClientesPorNome(const ANome: string): TObjectList<TCliente>;
-    function ListarClientesPorCidade(const ACidade: string): TObjectList<TCliente>;
 
   end;
 
@@ -28,23 +27,23 @@ implementation
 
 { TClienteUseCases }
 
-constructor TClienteUseCases.Create(AClienteRepository: IClienteRepository);
+constructor TClienteUseCases.Create(AClienteRepository: IClienteRepository; AClienteService: IClienteService);
 begin
   inherited Create;
   FClienteRepository := AClienteRepository;
-  FClienteService := TClienteService.Create(FClienteRepository);
+  FClienteService := AClienteService;
 end;
 
 destructor TClienteUseCases.Destroy;
 begin
-  FClienteService.Free;
+
   inherited;
 end;
 
 function TClienteUseCases.CriarCliente(const ARazaoSocial, ANomeFantasia, ACEP, ALogradouro, AComplemento, ACidade, AUF, ATelefone, ACNPJ: string): Integer;
 var Cliente: TCliente;
 begin
-  Cliente := FClienteService.CriarCliente(ARazaoSocial);
+  Cliente := TCliente.Create(ARazaoSocial);
   try
     Cliente.AlterarDados(ARazaoSocial, ANomeFantasia);
     Cliente.DefinirEndereco(ACEP, ALogradouro, AComplemento, ACidade, AUF);
@@ -52,9 +51,8 @@ begin
     Cliente.DefinirDocumento(ACNPJ);
 
     FClienteService.ValidarCliente(Cliente);
-
-    FClienteRepository.Adicionar(Cliente);
-    Result := Cliente.Id;
+    FClienteRepository.Inserir(Cliente);
+    Result := Cliente.Cod_Cliente;
   finally
     Cliente.Free;
   end;
@@ -62,20 +60,20 @@ end;
 
 function TClienteUseCases.ObterClientePorId(AClienteId: Integer): TCliente;
 begin
-  Result := FClienteRepository.ObterPorId(AClienteId);
+  Result := FClienteService.BuscarClientePorCodigo(AClienteId);
 end;
 
 procedure TClienteUseCases.AtualizarCliente(AClienteId: Integer; const ARazaoSocial, ANomeFantasia: string);
 var Cliente: TCliente;
 begin
-  Cliente := FClienteRepository.ObterPorId(AClienteId);
+  Cliente := FClienteService.BuscarClientePorCodigo(AClienteId);
   if not Assigned(Cliente) then
     raise Exception.Create('Cliente não encontrado');
 
   try
     Cliente.AlterarDados(ARazaoSocial, ANomeFantasia);
     FClienteService.ValidarCliente(Cliente);
-    FClienteRepository.Atualizar(Cliente);
+    //FClienteRepository.Atualizar(Cliente);
   finally
     Cliente.Free;
   end;
@@ -83,17 +81,9 @@ end;
 
 procedure TClienteUseCases.ExcluirCliente(AClienteId: Integer);
 begin
-  FClienteRepository.Remover(AClienteId);
+  FClienteRepository.Excluir(AClienteId);
 end;
 
-function TClienteUseCases.ListarClientesPorNome(const ANome: string): TObjectList<TCliente>;
-begin
-  Result := FClienteRepository.ListarPorNome(ANome);
-end;
 
-function TClienteUseCases.ListarClientesPorCidade(const ACidade: string): TObjectList<TCliente>;
-begin
-  Result := FClienteRepository.ListarPorCidade(ACidade);
-end;
 
 end.

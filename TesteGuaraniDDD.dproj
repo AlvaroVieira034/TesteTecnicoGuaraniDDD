@@ -72,6 +72,8 @@
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Locale>1033</VerInfo_Locale>
         <AppEnableHighDPI>true</AppEnableHighDPI>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
@@ -94,12 +96,24 @@
         <DCCReference Include="Core\ValueObjects\Core.ValueObjects.Contato.pas"/>
         <DCCReference Include="Core\ValueObjects\Core.ValueObjects.Documento.pas"/>
         <DCCReference Include="Core\Repositories\Core.Repositories.IClienteRepository.pas"/>
-        <DCCReference Include="Core\Services\Core.Services.ClienteService.pas"/>
-        <DCCReference Include="Infrastructure\Persistence\Infrastructure.Persistence.ClienteRepositoryAdapter.pas"/>
         <DCCReference Include="Presentation\Controllers\Presentation.Controllers.ClienteFormController.pas"/>
         <DCCReference Include="Application\UseCases\Application.UseCases.ClienteUseCases.pas"/>
-        <DCCReference Include="Core\Entities\Core.Entities.Cliente.pas"/>
         <DCCReference Include="Core\Utils\Core.Utils.Validadores.pas"/>
+        <DCCReference Include="Core\Entities\Core.Entities.Cliente.pas"/>
+        <DCCReference Include="Infrastructure\Persistence\Legacy\cliente.model.pas"/>
+        <DCCReference Include="Infrastructure\Persistence\Infrastructure.Persistence.ClienteRepository.pas"/>
+        <DCCReference Include="Infrastructure\Connection\Infrastructure.Connection.DatabaseConnection.pas"/>
+        <DCCReference Include="Infrastructure\Connection\Infrastructure.Connection.ConexaoSingleton.pas"/>
+        <DCCReference Include="Core\Services\Core.Services.IClienteService.pas"/>
+        <DCCReference Include="Infrastructure\Service\Infrastructure.Service.ClienteService.pas"/>
+        <DCCReference Include="Presentation\Views\ucadastropadrao.pas">
+            <Form>FrmCadastroPadrao</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Presentation\Views\ucadcliente.pas">
+            <Form>FrmCadCliente</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -120,6 +134,13 @@
                 <Source>
                     <Source Name="MainSource">TesteGuaraniDDD.dpr</Source>
                 </Source>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclDataSnapNativeServer240.bpl">Embarcadero DBExpress DataSnap Native Server Components</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Program Files (x86)\DevExpress\VCL\Library\RS24\dcldxCloudServiceLibraryRS24.bpl">ExpressCloudService Library by Developer Express Inc.</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Program Files (x86)\DevExpress\VCL\Library\RS24\dcldxSpreadSheetCoreConditionalFormattingDialogsRS24.bpl">ExpressSpreadSheetCore Conditional Formatting Dialogs by Developer Express Inc.</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Program Files (x86)\DevExpress\VCL\Library\RS24\dclcxPivotGridOLAPRS24.bpl">ExpressPivotGrid OLAP by Developer Express Inc.</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Program Files (x86)\DevExpress\VCL\Library\RS24\dcldxGanttControlRS24.bpl">ExpressGanttControl by Developer Express Inc.</Excluded_Packages>
+                </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3">
                 <DeployFile LocalName="Win32\Debug\TesteGuaraniDDD.exe" Configuration="Debug" Class="ProjectOutput">
@@ -128,12 +149,27 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployClass Name="ProjectiOSDeviceResourceRules">
+                <DeployClass Name="DependencyModule">
+                    <Platform Name="Win32">
+                        <Operation>0</Operation>
+                        <Extensions>.dll;.bpl</Extensions>
+                    </Platform>
                     <Platform Name="iOSDevice64">
                         <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                    <Platform Name="OSX32">
+                        <RemoteDir>Contents\MacOS</RemoteDir>
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
                     </Platform>
                 </DeployClass>
                 <DeployClass Name="ProjectOSXResource">
@@ -512,27 +548,12 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <DeployClass Name="DependencyModule">
-                    <Platform Name="Win32">
-                        <Operation>0</Operation>
-                        <Extensions>.dll;.bpl</Extensions>
-                    </Platform>
+                <DeployClass Name="ProjectiOSDeviceResourceRules">
                     <Platform Name="iOSDevice64">
                         <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="OSX32">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
                     </Platform>
                 </DeployClass>
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>

@@ -2,7 +2,10 @@ unit Presentation.Controllers.ClienteFormController;
 
 interface
 
-uses Application.UseCases.ClienteUseCases, Core.Entities.Cliente, ucadcliente;
+uses
+  System.SysUtils, System.Generics.Collections, Application.UseCases.ClienteUseCases, Core.Entities.Cliente,
+  Core.Repositories.IClienteRepository, Core.Services.IClienteService, Infrastructure.Persistence.ClienteRepository,
+  Infrastructure.Service.ClienteService, ucadcliente;
 
 type
   TClienteFormController = class
@@ -10,6 +13,8 @@ type
   private
     FClienteUseCases: TClienteUseCases;
     FView: TFrmCadCliente;
+    FClienteRepository: IClienteRepository;
+    FClienteService: IClienteService;
 
   public
     constructor Create(AView: TFrmCadCliente);
@@ -19,6 +24,7 @@ type
     procedure SalvarCliente;
     procedure ExcluirCliente(AClienteId: Integer);
     procedure PesquisarClientes(const ANome: string);
+    procedure PreencherComboClientes;
 
   end;
 
@@ -33,20 +39,23 @@ begin
   inherited Create;
   FView := AView;
 
-  // Usar adapter para compatibilidade
-  ClienteRepository := TClienteRepositoryAdapter.Create;
-  FClienteUseCases := TClienteUseCases.Create(ClienteRepository);
+  // Criar as implementações concretas
+  FClienteRepository := TClienteRepository.Create;
+  FClienteService := TClienteService.Create;
+
+  // Injectar ambas as dependências no Use Case
+  FClienteUseCases := TClienteUseCases.Create(FClienteRepository, FClienteService);
 end;
 
 destructor TClienteFormController.Destroy;
 begin
   FClienteUseCases.Free;
-  inherited;
+  inherited Destroy;
+
 end;
 
 procedure TClienteFormController.CarregarCliente(AClienteId: Integer);
-var
-  Cliente: TCliente;
+var Cliente: TCliente;
 begin
   Cliente := FClienteUseCases.ObterClientePorId(AClienteId);
   try
@@ -66,8 +75,7 @@ begin
 end;
 
 procedure TClienteFormController.SalvarCliente;
-var
-  ClienteId: Integer;
+var ClienteId: Integer;
 begin
   if FView.EdtCodigoCliente.Text = '' then
   begin

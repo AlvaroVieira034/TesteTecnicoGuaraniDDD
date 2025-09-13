@@ -45,31 +45,31 @@ end;
 class function TValidadores.ValidarCEP(const ACEP: string): Boolean;
 const CEP_REGEX = '^\d{5}-\d{3}$';
 begin
-  Result := (FCEP = '') or TRegEx.IsMatch(FCEP, CEP_REGEX);
+  Result := (ACEP = '') or TRegEx.IsMatch(ACEP, CEP_REGEX);
 end;
 
 class function TValidadores.ValidarCNPJ(const ACNPJ: string): Boolean;
 const CNPJ_REGEX = '^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$';
 begin
-  Result := (FCNPJ = '') or TRegEx.IsMatch(FCNPJ, CNPJ_REGEX);
+  Result := (ACNPJ = '') or TRegEx.IsMatch(ACNPJ, CNPJ_REGEX);
 end;
 
 class function TValidadores.ValidarCPF(const ACPF: string): Boolean;
 const CPF_REGEX = '^\d{3}\.\d{3}\.\d{3}-\d{2}$';
 begin
-  Result := (FCPF = '') or TRegEx.IsMatch(FCPF, CPF_REGEX);
+  Result := (ACPF = '') or TRegEx.IsMatch(ACPF, CPF_REGEX);
 end;
 
 class function TValidadores.ValidarEmail(const AEmail: string): Boolean;
 const EMAIL_REGEX = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
 begin
-  Result := (FEmail = '') or TRegEx.IsMatch(FEmail, EMAIL_REGEX);
+  Result := (AEmail = '') or TRegEx.IsMatch(AEmail, EMAIL_REGEX);
 end;
 
 class function TValidadores.ValidarTelefone(const ATelefone: string): Boolean;
 const TELEFONE_REGEX = '^\(?\d{2}\)?[\s-]?\d{4,5}-?\d{4}$';
 begin
-  Result := (FTelefone = '') or TRegEx.IsMatch(FTelefone, TELEFONE_REGEX);
+  Result := (ATelefone = '') or TRegEx.IsMatch(ATelefone, TELEFONE_REGEX);
 end;
 
 end.
